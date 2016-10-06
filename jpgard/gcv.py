@@ -14,6 +14,8 @@ from googleapiclient import discovery
 import httplib2
 from oauth2client.client import GoogleCredentials
 import base64
+import requests
+import json
 from PIL import Image
 from PIL import ImageDraw
 
@@ -23,6 +25,20 @@ DISCOVERY_URL='https://{api}.googleapis.com/$discovery/rest?version={apiVersion}
 
 INPUT_FILE_TEST = 'face_input.jpg'
 OUTPUT_FILE_TEST = 'face_output.jpg'
+
+def label_detection():
+	"""
+	TODO: returns label detection results from GCV API.
+	See GCV documentation here: https://cloud.google.com/vision/docs/requests-and-responses#types_of_vision_api_requests
+	"""
+
+	return None
+
+def text_detection():
+	"""
+	TODO: returns text detection results from GCV API.
+	See GCV documentation here: https://cloud.google.com/vision/docs/requests-and-responses#types_of_vision_api_requests
+	"""
 
 
 # Create the Service Object
