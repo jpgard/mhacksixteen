@@ -36,12 +36,12 @@ same as claiming leeches suck out
 poisons, but it's fairly close.
  ```
  
- 
 <img src = "https://github.com/jpgard/mhacksixteen/blob/master/jpgard/img/article.jpg" width = "175">
 
 ### Another example:
 
 ` $ python gcv_label.py ./img/motorcycle.jpg -nl 10`
+
 ```
 Found labels in ./img/motorcycle.jpg:
  
@@ -58,6 +58,7 @@ chopper
 
 No text found in your image.
 ```
+
 <img src = "https://github.com/jpgard/mhacksixteen/blob/master/jpgard/img/motorcycle.jpg" width = "175">
 
 
