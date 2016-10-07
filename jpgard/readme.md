@@ -29,6 +29,6 @@ poisons, but it's fairly close.
  ```
  
  
- ![alt text](https://github.com/jpgard/mhacksixteen/blob/master/jpgard/img/article.jpg "Logo Title Text 1")
+ ![alt text](https://github.com/jpgard/mhacksixteen/blob/master/jpgard/img/article.jpg width = 500 "Logo Title Text 1")
 
  
