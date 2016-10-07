@@ -25,7 +25,6 @@ Actually: To say that drinking juice
 detoxifies the body isn't quite the
 same as claiming leeches suck out
 poisons, but it's fairly close.
- ooo Verizon 10:39 PM By SABRINA TAVERNISE APRIL 20, 2016 Oriana Koren for The New York Times <strong>Misconception: strong> Juice cleansing can remove toxins from wour system. Actually: To say that drinking juice detoxifies the body isn't quite the same as claiming leeches suck out poisons, but it's fairly close.
  ```
  
  
