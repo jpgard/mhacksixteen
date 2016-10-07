@@ -9,7 +9,9 @@ This script fetches labels and text from an image. Currently, it fetches one lab
 ### Usage example:
 
 `$ python gcv_label.py ./img/article.jpg -nl 10`
-```Found labels in ./img/article.jpg:
+
+```
+Found labels in ./img/article.jpg:
  
  color
 font
@@ -40,7 +42,7 @@ poisons, but it's fairly close.
 
 ### Another example:
 
-` $ python gcv_label.py ./img/motorcycle.jpg -nl 10`
+`$ python gcv_label.py ./img/motorcycle.jpg -nl 10`
 
 ```
 Found labels in ./img/motorcycle.jpg:
