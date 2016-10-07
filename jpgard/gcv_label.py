@@ -25,7 +25,7 @@ from oauth2client.client import GoogleCredentials
 
 
 
-def detect_labels(photo_file):
+def detect_labels(photo_file, nl):
     """Run a label request on a single image"""
 
     credentials = GoogleCredentials.get_application_default()
@@ -40,13 +40,13 @@ def detect_labels(photo_file):
                 },
                 'features': [{
                     'type': 'LABEL_DETECTION',
-                    'maxResults': 1
+                    'maxResults': nl
                 }]
             }]
         })
         response = service_request.execute()
-        label = response['responses'][0]['labelAnnotations'][0]['description']
-        print('Found label: %s for %s' % (label, photo_file))
+        labels = [x['description'] for x in response['responses'][0]['labelAnnotations']]
+        print('Found labels in %s:\n \n %s \n \n' % (photo_file, '\n'.join(labels)))
 
 
 
@@ -69,15 +69,19 @@ def detect_text(photo_file):
             }]
         })
         response = service_request.execute()
-        full_text = [x['description'] for x in response['responses'][0]['textAnnotations']]
-        print('Found text in %s: \n %s' % (photo_file, ' '.join(full_text)))
+        try:
+            full_text = response['responses'][0]['textAnnotations'][0]['description']
+            print('Found text in %s:\n \n %s' % (photo_file, full_text))
+        except KeyError:
+            print('No text found in your image.')
 
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('image_file', help='The image you\'d like to label.')
+    parser.add_argument('-nl', help='The number of labels you\'d like returned')
     args = parser.parse_args()
-    detect_labels(args.image_file)
+    detect_labels(args.image_file, args.nl)
     detect_text(args.image_file)
 
