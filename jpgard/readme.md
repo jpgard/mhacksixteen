@@ -29,6 +29,6 @@ poisons, but it's fairly close.
  ```
  
  
-<img src = "https://github.com/jpgard/mhacksixteen/blob/master/jpgard/img/article.jpg" width = "500">
+<img src = "https://github.com/jpgard/mhacksixteen/blob/master/jpgard/img/article.jpg" width = "250">
 
  
