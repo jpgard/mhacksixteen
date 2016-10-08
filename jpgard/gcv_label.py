@@ -20,6 +20,7 @@ $ pip install Pillow
 import argparse
 import base64
 import httplib2
+import pprint
 
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
@@ -39,15 +40,13 @@ def gt(text, api_key, dest_lang, print_output = False):
 
     return translated_text
 
-def gnl(text, print_output = False, dest_lang = None, api_key = None):
+def gnl(text, print_output = False):
     """
     Connect to Google Natural Language API; fetch named entities and translate (if dest_lang does not match language of text).
     See Google sample scripts here for more information: https://github.com/GoogleCloudPlatform/python-docs-samples/blob/master/language/ocr_nl/main.py
 
     :param text:
     :param print_output:
-    :param dest_lang:
-    :param api_key: Optional API key for google translate API (required for translation)
     """
     response_out = None
     entities = None
@@ -99,14 +98,6 @@ def gnl(text, print_output = False, dest_lang = None, api_key = None):
     }
 
     return response_out_gnl
-
-
-
-    # if dest_lang != text language, translate to text_lang
-
-    # build response
-
-    return response_out
 
 
 def fetch_image_data(photo_file, print_output = False, nlab = 1, nlogo = 1, return_type = 'json',
@@ -182,12 +173,10 @@ None, dest_lang = None, api_key = None):
         # using text from GCV response, get named entitites and translate text, if requested
         if full_text:
             clean_text = full_text.replace('\n', ' ')
-            response_gnl = gnl(full_text, print_output=True, dest_lang=dest_lang, api_key = api_key)
-            import ipdb; ipdb.set_trace()
-            lang = None #TODO: get language from GNL response
-            if dest_lang != lang:
-                translation = gt(text, api_key, dest_lang)
-
+            response_gnl = gnl(full_text, print_output=True)
+            text_lang = response_gnl['data']['lang']
+            if dest_lang != text_lang:
+                gt_translation = gt(clean_text, api_key, dest_lang)
 
         # construct JSEND-compliant JSON response (see https://labs.omniti.com/labs/jsend for
         # more info on this format)
@@ -197,25 +186,19 @@ None, dest_lang = None, api_key = None):
             'data': {
                 'full_text': full_text,
                 'labels': labels,
-                'logos': logos
+                'logos': logos,
+                'lang': response_gnl.get('data').get('lang'),
+                'entities': response_gnl.get('data').get('entities'),
+                'wikipedia': response_gnl.get('data').get('wikipedia'),
+                'translation': gt_translation
             },
             'message': None
         }
 
         # print output; if requested
         if print_output:
-            if labels:
-                print('Found labels in %s:\n \n%s \n \n' % (photo_file, '\n'.join(labels)))
-            else:
-                print('No labels found.')
-            if full_text:
-                print('Found text in %s:\n \n%s' % (photo_file, full_text))
-            else:
-                print('No text found.')
-            if logos:
-                print('Found logos in %s:\n \n%s \n \n' % (photo_file, '\n'.join(logos)))
-            else:
-                print('No logos found.')
+            print('IMAGE_RESULTS: \n\n')
+            pprint.pprint(response_out)
 
         return response_out
 
@@ -233,5 +216,4 @@ if __name__ == '__main__':
     response_out = fetch_image_data(args.image_file, print_output=True,nlab = args.nla,
                                      nlogo = args.nlo, return_type = args.r, dest_lang=args.d,
                        api_key = args.k)
-    import ipdb; ipdb.set_trace()
 
