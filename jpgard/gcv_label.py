@@ -190,6 +190,7 @@ None, dest_lang = None, api_key = None):
                 'lang': response_gnl.get('data').get('lang'),
                 'entities': response_gnl.get('data').get('entities'),
                 'wikipedia': response_gnl.get('data').get('wikipedia'),
+                'dest_lang': dest_lang,
                 'translation': gt_translation
             },
             'message': None
