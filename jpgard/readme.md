@@ -16,7 +16,8 @@ This script fetches labels, text, logos, named entities, relevant wikipedia link
 IMAGE_RESULTS: 
 
 
-{'data': {'entities': {'New York Times': 'ORGANIZATION',
+{'data': {'dest_lang': 'ko',
+          'entities': {'New York Times': 'ORGANIZATION',
                        'Oriana Koren': 'PERSON',
                        'SABRINA TAVERNISE': 'PERSON',
                        'Verizon': 'ORGANIZATION'},
@@ -50,6 +51,7 @@ IMAGE_RESULTS:
                         'Verizon': 'http://en.wikipedia.org/wiki/Verizon_Communications'}},
  'message': None,
  'status': 'success'}
+
 ```
 
 # JSON response format
@@ -65,6 +67,7 @@ The response returned is a [JSEND-compliant](https://labs.omniti.com/labs/jsend)
   * labels: labels associated with the image or objects detected within the image (i.e., 'car', 'automobile', 'driver', 'person').
   * lang: language of the text.
   * logos: names of any brand logos detected within the image.
+  * dest_lang: destination language (the language the user requested the text to be translated into).
   * translation: text translated into destination language.
 
 
