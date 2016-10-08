@@ -69,16 +69,20 @@ No text found in your image.
 The response returned is a [JSEND-compliant](https://labs.omniti.com/labs/jsend) JSON response that looks like this:
 
 ```
-{'data': {'full_text': 'E adidas\n2558\n2011 BOSTON\nthe future is yours\n',
+{'data': 
+        {
+          'full_text': 'E adidas\n2558\n2011 BOSTON\nthe future is yours\n',
           'labels': ['human action',
                      'sports',
                      'jumping',
                      'endurance sports',
                      'athletics',
                      'physical exercise'],
-          'logos': None},
+          'logos': None
+         },
  'message': None,
- 'status': 'success'}
+ 'status': 'success'
+ }
  ```
  * status: the status of your response (hopefully 'success', otherwise 'error').
  * data: nested field of any data returned for the response (logos, text, labels, etc.).
