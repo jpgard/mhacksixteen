@@ -68,7 +68,8 @@ No text found in your image.
 
 The response returned is a [JSEND-compliant](https://labs.omniti.com/labs/jsend) JSON response that looks like this:
 
-```{'data': {'full_text': 'E adidas\n2558\n2011 BOSTON\nthe future is yours\n',
+```
+{'data': {'full_text': 'E adidas\n2558\n2011 BOSTON\nthe future is yours\n',
           'labels': ['human action',
                      'sports',
                      'jumping',
