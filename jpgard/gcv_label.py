@@ -19,18 +19,68 @@ $ pip install Pillow
 
 import argparse
 import base64
+import httplib2
 
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
+def gnl(text, print_output = False, dest_lang = None):
+    """
+    Connect to Google Natural Language API; fetch named entities and translate (if dest_lang does not match language of text).
+    See Google sample scripts here for more information: https://github.com/GoogleCloudPlatform/python-docs-samples/blob/master/language/ocr_nl/main.py
+    """
+    response_out = None
+    entities = None
+    entities_dict = None
+    lang = None
+    
+    # get credentials and connect to GNL API
+    credentials = GoogleCredentials.get_application_default()
+    scoped_credentials = credentials.create_scoped(['https://www.googleapis.com/auth/cloud-platform'])
+    http = httplib2.Http()
+    scoped_credentials.authorize(http)
+    service = discovery.build('language', 'v1beta1', http=http)
 
-def gcv(photo_file, print_output = False, nlab = 1, nlogo = 1, return_type = 'json'):
+    # fetch named entities
+    body = {
+        'document': {
+            'type': 'PLAIN_TEXT',
+            'content': text,
+        },
+        'encodingType': 'UTF8',
+    }
+    entities = []
+    try:
+        request = service.documents().analyzeEntities(body=body)
+        response = request.execute()
+        entities = response['entities']
+        entities_dict = {e['name']: e['type'] for e in entities}
+        lang = response['language']
+    # except errors.HttpError as e:
+    #     #TODO
+    #     pass
+    except KeyError as e2:
+        #TODO
+        pass
+
+    import ipdb; ipdb.set_trace()
+
+
+    # if dest_lang != text language, translate to text_lang
+
+    return response_out
+
+
+def gcv(photo_file, print_output = False, nlab = 1, nlogo = 1, return_type = 'json', translate =
+None):
     """
     Detect text and labels in photo_file.
     :param photo_file:
     :param print_output:
     :param nlab:
     :param nlogo:
+    :param translate: language to translate text to (if text is already in this language,
+    returns untranslated text).
     :return:
 
     """
@@ -89,6 +139,13 @@ def gcv(photo_file, print_output = False, nlab = 1, nlogo = 1, return_type = 'js
         except KeyError:
             pass
 
+
+        # get named entitites and translate text, if requested
+        if full_text:
+            clean_text = full_text.replace('\n', ' ')
+            response_gnl = gnl(full_text, print_output=True, dest_lang='CN')
+
+
         # construct JSEND-compliant JSON response (see https://labs.omniti.com/labs/jsend for
         # more info on this format)
 
@@ -118,7 +175,6 @@ def gcv(photo_file, print_output = False, nlab = 1, nlogo = 1, return_type = 'js
                 print('No logos found.')
 
         return response_out
-
 
 
 if __name__ == '__main__':
