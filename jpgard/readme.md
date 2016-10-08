@@ -72,4 +72,13 @@ The response returned is a [JSEND-compliant](https://labs.omniti.com/labs/jsend)
 
 
  
+If you are interested in writing a similar script, here are some resources I used to get started (in no particular order):
 
+https://github.com/GoogleCloudPlatform/python-docs-samples/blob/master/language/ocr_nl/main.py
+https://cloud.google.com/natural-language/
+https://cloud.google.com/translate/v2/quickstart#translate-text
+https://cloud.google.com/vision/docs/best-practices
+https://cloud.google.com/translate/docs/reference/libraries
+https://cloud.google.com/vision/docs/
+https://cloud.google.com/vision/docs/samples
+https://cloud.google.com/vision/docs/requests-and-responses#types_of_vision_api_requests
