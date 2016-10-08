@@ -59,13 +59,13 @@ The response returned is a [JSEND-compliant](https://labs.omniti.com/labs/jsend)
 * status: the status of your response (hopefully 'success', otherwise 'error').
 * message: an error message, if applicable; otherwise None.
 * data: nested field of any data returned for the response (logos, text, labels, etc.).
-  * entities
-  * full_text
-  * labels
-  * lang
-  * logos
-  * translation
-  * wikipedia
+  * entities: [named entities](https://en.wikipedia.org/wiki/Named-entity_recognition) recognized in the image text.
+  * wikipedia: wikipedia links for relevant named entities.
+  * full_text: the full text detected in the image.
+  * labels: labels associated with the image or objects detected within the image (i.e., 'car', 'automobile', 'driver', 'person').
+  * lang: language of the text.
+  * logos: names of any brand logos detected within the image.
+  * translation: text translated into destination language.
 
 
  
