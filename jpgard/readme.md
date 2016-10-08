@@ -59,13 +59,13 @@ The response returned is a [JSEND-compliant](https://labs.omniti.com/labs/jsend)
 * status: the status of your response (hopefully 'success', otherwise 'error').
 * message: an error message, if applicable; otherwise None.
 * data: nested field of any data returned for the response (logos, text, labels, etc.).
-.* entities
-.* full_text
-.* labels
-.* lang
-.* logos
-.* translation
-.* wikipedia
+  * entities
+  * full_text
+  * labels
+  * lang
+  * logos
+  * translation
+  * wikipedia
 
 
  
