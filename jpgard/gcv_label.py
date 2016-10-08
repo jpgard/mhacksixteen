@@ -25,17 +25,19 @@ from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 from google.cloud import translate
 
-def gt(text, api_key, print_output = False, dest_lang = None):
+def gt(text, api_key, dest_lang, print_output = False):
     """
     Translates text to dest_lang using Google Translate API.
     """
 
     # Instantiates a client
     translate_client = translate.Client(api_key)
+    text_clean = text.replace('\n', ' ')
     # translates with client
-    translation = translate_client.translate(text, target_language=dest_lang)
+    translation = translate_client.translate(text_clean, target_language=dest_lang)
+    translated_text = translation['translatedText']
 
-    return translation
+    return translated_text
 
 def gnl(text, print_output = False, dest_lang = None, api_key = None):
     """
@@ -83,10 +85,21 @@ def gnl(text, print_output = False, dest_lang = None, api_key = None):
         #TODO
         pass
 
-    if dest_lang != lang:
-        translation = gt(text, api_key)
+    # construct JSON response and return; this might be better as just a list if fet_image_data()
+    #  is going to generate a JSON response...
 
-    import ipdb; ipdb.set_trace()
+    response_out_gnl = {
+        'status': 'success',
+        'data': {
+            'entities': entities_dict,
+            'wikipedia': wikipedia_dict,
+            'lang': lang
+        },
+        'message': None
+    }
+
+    return response_out_gnl
+
 
 
     # if dest_lang != text language, translate to text_lang
@@ -96,8 +109,9 @@ def gnl(text, print_output = False, dest_lang = None, api_key = None):
     return response_out
 
 
-def gcv(photo_file, print_output = False, nlab = 1, nlogo = 1, return_type = 'json', translate =
-None):
+def fetch_image_data(photo_file, print_output = False, nlab = 1, nlogo = 1, return_type = 'json',
+             translate =
+None, dest_lang = None, api_key = None):
     """
     Detect text and labels in photo_file.
     :param photo_file:
@@ -116,6 +130,7 @@ None):
     labels = None
     logos = None
 
+    # get initial image data from Google Cloud Vision API (labels, text, and logos)
     with open(photo_file, 'rb') as image:
         image_content = base64.b64encode(image.read())
         service_request = service.images().annotate(body={
@@ -164,11 +179,14 @@ None):
         except KeyError:
             pass
 
-
-        # get named entitites and translate text, if requested
+        # using text from GCV response, get named entitites and translate text, if requested
         if full_text:
             clean_text = full_text.replace('\n', ' ')
-            response_gnl = gnl(full_text, print_output=True, dest_lang='CN')
+            response_gnl = gnl(full_text, print_output=True, dest_lang=dest_lang, api_key = api_key)
+            import ipdb; ipdb.set_trace()
+            lang = None #TODO: get language from GNL response
+            if dest_lang != lang:
+                translation = gt(text, api_key, dest_lang)
 
 
         # construct JSEND-compliant JSON response (see https://labs.omniti.com/labs/jsend for
@@ -210,9 +228,10 @@ if __name__ == '__main__':
     parser.add_argument('-r', help='The return type; currently only json is supported', default=
     'json')
     parser.add_argument('-d', help='Destination language')
-    parse.add_argument('-k', help = 'Google Translate API Key', required = True)
+    parser.add_argument('-k', help = 'Google Translate API Key', required = True)
     args = parser.parse_args()
-    response_out = gcv(args.image_file, print_output=True,nlab = args.nla,
-                                     nlogo = args.nlo, return_type = args.r)
+    response_out = fetch_image_data(args.image_file, print_output=True,nlab = args.nla,
+                                     nlogo = args.nlo, return_type = args.r, dest_lang=args.d,
+                       api_key = args.k)
     import ipdb; ipdb.set_trace()
 
