@@ -122,6 +122,7 @@ None, dest_lang = None, api_key = None):
     full_text = None
     labels = None
     logos = None
+    gt_translation = None
 
     # get initial image data from Google Cloud Vision API (labels, text, and logos)
     with open(photo_file, 'rb') as image:
