@@ -84,8 +84,7 @@ def gnl(text, print_output = False):
         #TODO
         pass
 
-    # construct JSON response and return; this might be better as just a list if fet_image_data()
-    #  is going to generate a JSON response...
+    # construct JSON response and return
 
     response_out_gnl = {
         'status': 'success',
@@ -100,18 +99,21 @@ def gnl(text, print_output = False):
     return response_out_gnl
 
 
-def fetch_image_data(photo_file, print_output = False, nlab = 1, nlogo = 1, return_type = 'json',
+def fetch_image_data(photo_file, print_output = False, nlab = 10, nlogo = 10, return_type = 'json',
              translate =
 None, dest_lang = None, api_key = None):
     """
-    Detect text and labels in photo_file.
-    :param photo_file:
-    :param print_output:
-    :param nlab:
-    :param nlogo:
+    Fetch data for photo_file using Google Cloud Vision API, Google Natural Language API,
+    and Google Translate API.
+
+    :param photo_file: path to photo file. Supports the following image formats:
+    https://cloud.google.com/vision/docs/best-practices
+    :param print_output: logical; if set to true, JSON output will be pretty-printed to terminal.
+    :param nlab: maximum number of labels to fetch for image.
+    :param nlogo: maximum number of logos to fetch for image.
     :param translate: language to translate text to (if text is already in this language,
     returns untranslated text).
-    :return:
+    :return: JSON file with
 
     """
     credentials = GoogleCredentials.get_application_default()
@@ -146,6 +148,7 @@ None, dest_lang = None, api_key = None):
             }]
         })
         gcv_response = service_request.execute()
+
         # check if error in GCV response; if so, return a response with the error message
         if 'error' in gcv_response['responses']:
             response_out = {
@@ -153,7 +156,6 @@ None, dest_lang = None, api_key = None):
                 'data': None,
                 'message': response['error']['message']
             }
-
             return response_out
 
         # extract relevant data from gcv response
@@ -178,9 +180,7 @@ None, dest_lang = None, api_key = None):
             if dest_lang != text_lang:
                 gt_translation = gt(clean_text, api_key, dest_lang)
 
-        # construct JSEND-compliant JSON response (see https://labs.omniti.com/labs/jsend for
-        # more info on this format)
-
+        # construct JSEND-compliant JSON response
         response_out = {
             'status': 'success',
             'data': {
