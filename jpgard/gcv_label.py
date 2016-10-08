@@ -23,11 +23,29 @@ import httplib2
 
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
+from google.cloud import translate
 
-def gnl(text, print_output = False, dest_lang = None):
+def gt(text, api_key, print_output = False, dest_lang = None):
+    """
+    Translates text to dest_lang using Google Translate API.
+    """
+
+    # Instantiates a client
+    translate_client = translate.Client(api_key)
+    # translates with client
+    translation = translate_client.translate(text, target_language=dest_lang)
+
+    return translation
+
+def gnl(text, print_output = False, dest_lang = None, api_key = None):
     """
     Connect to Google Natural Language API; fetch named entities and translate (if dest_lang does not match language of text).
     See Google sample scripts here for more information: https://github.com/GoogleCloudPlatform/python-docs-samples/blob/master/language/ocr_nl/main.py
+
+    :param text:
+    :param print_output:
+    :param dest_lang:
+    :param api_key: Optional API key for google translate API (required for translation)
     """
     response_out = None
     entities = None
@@ -54,8 +72,10 @@ def gnl(text, print_output = False, dest_lang = None):
         request = service.documents().analyzeEntities(body=body)
         response = request.execute()
         entities = response['entities']
-        entities_dict = {e['name']: e['type'] for e in entities}
-        lang = response['language']
+        entities_dict = {e.get('name'): e.get('type') for e in entities}
+        wikipedia_dict = {e.get('name'): e.get('metadata').get('wikipedia_url') for e in entities
+                          if e.get('metadata').get('wikipedia_url')}
+        lang = response.get('language')
     # except errors.HttpError as e:
     #     #TODO
     #     pass
@@ -63,10 +83,15 @@ def gnl(text, print_output = False, dest_lang = None):
         #TODO
         pass
 
+    if dest_lang != lang:
+        translation = gt(text, api_key)
+
     import ipdb; ipdb.set_trace()
 
 
     # if dest_lang != text language, translate to text_lang
+
+    # build response
 
     return response_out
 
@@ -184,6 +209,8 @@ if __name__ == '__main__':
     parser.add_argument('-nlo', help='The number of logos you\'d like returned', default = 10)
     parser.add_argument('-r', help='The return type; currently only json is supported', default=
     'json')
+    parser.add_argument('-d', help='Destination language')
+    parse.add_argument('-k', help = 'Google Translate API Key', required = True)
     args = parser.parse_args()
     response_out = gcv(args.image_file, print_output=True,nlab = args.nla,
                                      nlogo = args.nlo, return_type = args.r)
