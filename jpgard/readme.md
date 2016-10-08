@@ -64,3 +64,23 @@ No text found in your image.
 <img src = "https://github.com/jpgard/mhacksixteen/blob/master/jpgard/img/motorcycle.jpg" width = "175">
 
 
+# JSON response format
+
+The response returned is a [JSEND-compliant](https://labs.omniti.com/labs/jsend) JSON response that looks like this:
+
+```{'data': {'full_text': 'E adidas\n2558\n2011 BOSTON\nthe future is yours\n',
+          'labels': ['human action',
+                     'sports',
+                     'jumping',
+                     'endurance sports',
+                     'athletics',
+                     'physical exercise'],
+          'logos': None},
+ 'message': None,
+ 'status': 'success'}
+ ```
+ * status: the status of your response (hopefully 'success', otherwise 'error').
+ * data: nested field of any data returned for the response (logos, text, labels, etc.).
+ * message: an error message, if applicable; otherwise None.
+ 
+
