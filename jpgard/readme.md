@@ -8,7 +8,7 @@ This script fetches labels, text, logos, named entities, relevant wikipedia link
 
 ### Usage example:
 
-`$ python gcv_label.py ./img/article.jpg -d ko -k AIzaSyBHdeK5TxbfowdrbBYw-IclID0oIC5dHaA`
+`$ python gcv_label.py ./img/article.jpg -d ko -k <YOUR GOOGLE TRANSLATE API KEY>`
  
 <img src = "https://github.com/jpgard/mhacksixteen/blob/master/jpgard/img/article.jpg" width = "175">
 
